@@ -1,0 +1,43 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+table, tbody {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+td {
+    width: calc(100% / 9);
+    height: calc(100% / 9);
+    position: relative;
+}
+.done {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+#save {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-weight: bolder;
+}
+.editable {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    width: 100%;
+    text-align: center;
+}
+.theme-cell {
+    background-color: #32E3A2;
+}
+.grand-theme-cell {
+    background-color: #34ED75;
+}
