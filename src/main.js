@@ -3,11 +3,11 @@ function $(id) {
 }
 
 function dblclickAction (e) {
-    // 子要素でイベントが起きた時は処理をしない
-    if (e.target !== e.currentTarget) return;
-
-    const elem = $(e.target.lastChild.id);
-    setBadge(elem, elem.dataset.done === "true" ? "false" : "true");
+    let target = e.currentTarget;
+    if (target.dataset.done === undefined) {
+        target = target.lastChild;
+    }
+    setBadge(target, target.dataset.done === "true" ? "false" : "true");
 }
 
 function setBadge(e, b) {
