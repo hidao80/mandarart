@@ -16,7 +16,7 @@ function dblclickAction (e) {
     if (target.dataset.done === undefined) {
         target = target.lastChild;
     }
-    setBadge(target, target.dataset.done === "true" ? "false" : "true");
+    toggleBadge(target, target.dataset.done === "true" ? "false" : "true");
 }
 
 /**
@@ -24,7 +24,7 @@ function dblclickAction (e) {
  * @param {Element} e - dataset.doneを持つElement
  * @param {string} b - booleanを表す文字列
  */
-function setBadge(e, b) {
+function toggleBadge(e, b) {
     if (b === "true") {
         e.previousElementSibling.innerText = "⭐";
         e.dataset.done = true;    
@@ -76,7 +76,7 @@ function load(json) {
     // JSONの内容を各セルに書き込む
     jso.forEach(e => {
         const elem = $(e.id);
-        setBadge(elem, e.done);
+        toggleBadge(elem, e.done);
         elem.innerText = e.text;
     });
 }
