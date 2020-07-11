@@ -97,7 +97,7 @@ function ready(loaded) {
 // 動作する初期化処理をコールバック関数としてセットしておく
 ready(() => {
     // セルとなるDOMをリストアップ    
-    const cells = document.querySelectorAll(":scope .cell");
+    const cells = document.querySelectorAll(".cell");
 
     // すべてのセルにダブルクリック時のコールバック関数を登録する
     cells.forEach(cell => {
