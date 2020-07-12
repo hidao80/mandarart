@@ -39,7 +39,7 @@ function toggleBadge(e, b) {
  * 保存しているJSONデータをダウンロードする
  * @param {Event} e - クリック時のイベントオブジェクト 
  */
-function download(e) {
+function handleDownload(e) {
   const saveDataName = location.hash;
   const json = JSON.stringify(localStorage.getItem(saveDataName));
   const donwloadFileNmae = saveDataName + ".json"
@@ -57,7 +57,7 @@ function download(e) {
  * 編集中のマンダラートを保存する
  * @param {Event} e - 保存ボタンをクリックしたときのイベントオブジェクト
  */
-function save(e) {
+function handleSave(e) {
   // セルとなるDOMをリストアップ
   const cells = document.querySelectorAll(".cell");
 
@@ -82,6 +82,27 @@ function save(e) {
 }
 
 /**
+ * 編集中のマンダラートを全削除する
+ * @param {Event} e - 全削除ボタンをクリックしたときのイベントオブジェクト
+ */
+function handleRemoveAll(e) {
+  // セルとなるDOMをリストアップ
+  const cells = document.querySelectorAll(".cell");
+
+  // セルのID、完了バッジの状態、目標のデータをJavascriptオブジェクト化
+  const jso = [...cells].map((el) => {
+    const child = el.lastChild;
+    return {
+      id: child.id,
+      done: "false",
+      text: ""
+    };
+  });
+
+  load(JSON.stringify(jso));
+}
+
+/**
  * 前回保存したマンダラートを読み込む
  * @param {string} json - 全開保存したマンダラートを表すJSON
  */
@@ -100,6 +121,10 @@ function load(json) {
   });
 }
 
+/**
+ * ファイルをドロップしたとき、ドロップしたファイルを読み込んで画面に反映する
+ * @param {Event} e - ドロップイベントオブジェクト
+ */
 function handleDropAction(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -150,11 +175,9 @@ ready(() => {
     cell.addEventListener("dblclick", handleDblclickAction);
   });
 
-  // 保存ボタンをクリック時のコールバック関数を登録する
-  $("save").addEventListener("click", save);
-
-  // ダウンロードボタンをクリック時のコールバック関数を登録する
-  $("download").addEventListener("click", download);
+  $("save").addEventListener("click", handleSave);
+  $("download").addEventListener("click", handleDownload);
+  $("remove_all").addEventListener("click", handleRemoveAll);
 
   // 中央セルにファイルドロップイベント時のコールバック関数を登録する
   const target_cell = $("grand_theme_cell");
