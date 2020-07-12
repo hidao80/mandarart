@@ -148,7 +148,7 @@ function handleDropAction(e) {
     const file = droppedFiles[0];
 
     ajaxData.append('file', file);
-    ajax.open('POST', 'index.html');
+    ajax.open('GET', 'index.html');
     ajax.onload = (e) => {
       if (ajax.status >= 200 && ajax.status < 400) {
         const fr = new FileReader();
