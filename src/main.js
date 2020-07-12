@@ -10,7 +10,7 @@ function $(id) {
  * セル内でダブルクリックしたときのコールバック関数
  * @param {Event} e - ダブルクリック時のイベントオブジェクト 
  */
-function dblclickAction (e) {
+function handleDblclickAction (e) {
   // バッジのオンオフを行う
   let target = e.currentTarget;
   if (target.dataset.done === undefined) {
@@ -100,6 +100,33 @@ function load(json) {
   });
 }
 
+function handleDropAction(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const droppedFiles = e.dataTransfer.files; // the files that were dropped
+
+  if (droppedFiles.length > 0) {
+    const ajaxData = new FormData();
+    const ajax = new XMLHttpRequest();
+    const file = droppedFiles[0];
+
+    ajaxData.append('file', file);
+    ajax.open('POST', 'index.html');
+    ajax.onload = (e) => {
+      if (ajax.status >= 200 && ajax.status < 400) {
+        const fr = new FileReader();
+        fr.onload = () => {
+          console.log("r", fr.result);
+          load(fr.result);
+        };
+        fr.readAsText(file);
+      }
+    }
+    ajax.send(ajaxData);    
+  }
+}
+
 /**
  * DOM読み込み完了時の動作
  * @param {function} loaded - DOM読み込み完了時に実行するコールバック関数
@@ -120,14 +147,25 @@ ready(() => {
 
   // すべてのセルにダブルクリック時のコールバック関数を登録する
   cells.forEach(cell => {
-    cell.addEventListener("dblclick", e => dblclickAction(e));
+    cell.addEventListener("dblclick", handleDblclickAction);
   });
 
   // 保存ボタンをクリック時のコールバック関数を登録する
-  $("save").addEventListener("click", e => save(e));
+  $("save").addEventListener("click", save);
 
   // 保存ボタンをクリック時のコールバック関数を登録する
-  $("download").addEventListener("click", e => download(e));
+  $("download").addEventListener("click", download);
+
+  // 中央セルにファイルドロップイベント時のコールバック関数を登録する
+  const target_cell = $("grand_theme_cell");
+  ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(event => {
+    target_cell.addEventListener(event, (e) => {
+      // ブラウザデフォルトのイベント処理を停止
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+  target_cell.addEventListener("drop", handleDropAction);
 
   // 保存データのロードを試みる
   load(localStorage.getItem(location.hash));
