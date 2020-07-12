@@ -7,6 +7,17 @@ function $(id) {
 }
 
 /**
+ * 現在のURLに含まれるハッシュからファイル名を取得する
+ */
+function getFilename() {
+  let filename = location.hash;
+  if (location.hash === "") {
+    filename = "mandarart";
+  }
+  return filename;
+}
+
+/**
  * セル内でダブルクリックしたときのコールバック関数
  * @param {Event} e - ダブルクリック時のイベントオブジェクト 
  */
@@ -40,7 +51,7 @@ function toggleBadge(e, b) {
  * @param {Event} e - クリック時のイベントオブジェクト 
  */
 function handleDownload(e) {
-  const saveDataName = location.hash;
+  const saveDataName = getFilename();
   const json = JSON.stringify(localStorage.getItem(saveDataName));
   const donwloadFileNmae = saveDataName + ".json"
   const downLoadLink = document.createElement("a");;
@@ -72,7 +83,7 @@ function handleSave(e) {
   });
 
   // 画面の内容をJSONに変換し、URLにつけたハッシュをセーブスロットとしてlocalStroageに保存
-  localStorage.setItem(location.hash, JSON.stringify(jso));
+  localStorage.setItem(getFilename(), JSON.stringify(jso));
 
   // 保存時アニメーション
   e.target.innerText = "Saved!💾";
