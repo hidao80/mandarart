@@ -46,11 +46,32 @@ function toggleBadge(e, b) {
 }
 
 /**
+ * divを直接編集したときに自動的に挿入されることがある
+ * "ms-editor-squiggler"クラスを持つタグをすべて消去する
+ */
+function deleteAllGarbageElement() {
+  // すべてのセルからフォーカスを外し、"ms-editor-squiggler"クラスを持つタグを出現させる
+  const cells = document.querySelectorAll(".cells");
+  for (const cell of cells) {
+    cell.blur();
+  }
+
+  // すべての"ms-editor-squiggler"クラスを持つタグを削除する
+  const elems = document.querySelectorAll(".ms-editor-squiggler");
+  for (const elem of elems) {
+    elem.remove();
+  }
+}
+
+/**
  * ダウンロードボタンをクリックしたときのコールバック関数
  * 保存しているJSONデータをダウンロードする
  * @param {Event} e - クリック時のイベントオブジェクト 
  */
 function handleDownload(e) {
+  // ロードの邪魔になる要素を削除
+  deleteAllGarbageElement();
+
   const saveDataName = getFilename();
   const json = JSON.stringify(localStorage.getItem(saveDataName));
   const donwloadFileNmae = saveDataName + ".json"
@@ -69,6 +90,9 @@ function handleDownload(e) {
  * @param {Event} e - 保存ボタンをクリックしたときのイベントオブジェクト
  */
 function handleSave(e) {
+  // ロードの邪魔になる要素を削除
+  deleteAllGarbageElement();
+
   // セルとなるDOMをリストアップ
   const cells = document.querySelectorAll(".cell");
 
@@ -90,6 +114,9 @@ function handleSave(e) {
   setTimeout(() => {
     e.target.innerText = "💾";
   }, 3000);
+
+  // ロードの邪魔になる要素を削除
+  deleteAllGarbageElement();
 }
 
 /**
@@ -118,6 +145,9 @@ function handleRemoveAll(e) {
  * @param {string} json - 全開保存したマンダラートを表すJSON
  */
 function load(json) {
+  // 不要に挿入されたタグを削除する
+  deleteAllGarbageElement();
+
   // 保存データがないときは処理しない
   if (json === null) return;
 
@@ -202,5 +232,5 @@ ready(() => {
   target_cell.addEventListener("drop", handleDropAction);
 
   // 保存データのロードを試みる
-  load(localStorage.getItem(location.hash === "" ? "mandarart" : location.hash));
+  load(localStorage.getItem(getFilename()));
 });
