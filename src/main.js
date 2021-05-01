@@ -202,5 +202,5 @@ ready(() => {
   target_cell.addEventListener("drop", handleDropAction);
 
   // 保存データのロードを試みる
-  load(localStorage.getItem(location.hash));
+  load(localStorage.getItem(location.hash === "" ? "mandarart" : location.hash));
 });
